@@ -5,7 +5,7 @@ open("02.txt") do f
             any(≠(sign(delta[end])), sign.(delta))
     end
     p1, p2 = 0, 0
-    for l in eachline(f)
+    for l ∈ eachline(f)
         ns = parse.(Int, split(l))
         for i ∈ 0:length(ns)
             nns = [ns[1:i-1]; ns[i+1:end]]
