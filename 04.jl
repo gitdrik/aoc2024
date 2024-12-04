@@ -1,4 +1,3 @@
-function run()
 open("04.txt") do f
     M = stack(readlines(f))
     rows, cols = size(M)
@@ -15,5 +14,4 @@ open("04.txt") do f
     end
     println("Part 1: ", p1)
     println("Part 2: ", p2)
-end
 end
