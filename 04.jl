@@ -1,8 +1,8 @@
 open("04.txt") do f
     M = stack(readlines(f))
     rows, cols = size(M)
-    MASX = Set(collect.(["MAS", "SAM"]))
-    MAS = Set(collect.(["XMAS", "SAMX"]))
+    MAS = Set(collect.(["MAS", "SAM"]))
+    XMAS = Set(collect.(["XMAS", "SAMX"]))
     p1, p2 = 0, 0
     for r∈1:rows, c∈1:cols
         c+3≤cols && (p1 += M[r, c:c+3]∈XMAS)
