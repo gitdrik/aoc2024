@@ -1,4 +1,3 @@
-function run()
 open("02.txt") do f
     p1, p2 = 0, 0
     for l ∈ eachline(f)
@@ -15,5 +14,4 @@ open("02.txt") do f
     end
     println("Part 1: ", p1)
     println("Part 2: ", p2)
-end
 end
