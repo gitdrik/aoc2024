@@ -1,12 +1,12 @@
 open("05.txt") do f
     afters::Dict{Int,Set{Int}} = Dict()
-    for l∈eachline(f)
+    for l ∈ eachline(f)
         l=="" && break
         a, b = parse.(Int, split(l,'|'))
-        a∉keys(afters) && (afters[a]=Set())
+        a ∉ keys(afters) && (afters[a]=Set())
         push!(afters[a], b)
     end
-    updates = [parse.(Int, split(l,',')) for l∈eachline(f)]
+    updates = [parse.(Int, split(l,',')) for l ∈ eachline(f)]
     
     p1, p2 = 0, 0
     for u ∈ updates
@@ -14,7 +14,7 @@ open("05.txt") do f
         for i ∈ 2:length(u)
             pos = length(good)+1
             for j ∈ 1:length(good)
-                if u[i]∈keys(afters) && good[j]∈afters[u[i]]
+                if good[j] ∈ afters[u[i]]
                     pos = j
                     break
                 end
