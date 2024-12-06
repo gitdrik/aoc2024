@@ -8,38 +8,37 @@ open("06.txt") do f
         M[r][c]=='#' && push!(O, (r, c))
         M[r][c]=='^' && (start = (r, c))
     end
-    dirs = [(-1,0),(0,1),(1,0),(0,-1)]
-
+    
+    p2 = 0
     dir = 1
     pos = start
+    I = Set{Tuple{Int,Int}}()
     seen = Set{Tuple{Int,Int}}()
+    dp = [(-1,0),(0,1),(1,0),(0,-1)]
     while all(pos .∈ (rows, cols))
         push!(seen, pos)
-        npos = pos.+dirs[dir]
+        npos = pos .+ dp[dir]
         if npos ∈ O
             dir = mod1(dir+1, 4)
         else
+            npos ∈ I && (pos = npos; continue)
+            push!(I, npos)
+            dir2 = dir
+            pos2 = pos
+            seen2 = Set{Tuple{Tuple{Int,Int},Int}}()
+            while all(pos2 .∈ (rows, cols))
+                (pos2, dir2) ∈ seen2 && (p2 += 1; break)
+                push!(seen2, (pos2, dir2))
+                npos2 = pos2 .+ dp[dir2]
+                if npos2 ∈ O || npos2 == npos
+                    dir2 = mod1(dir2 + 1, 4)
+                else
+                    pos2 = pos2 .+ dp[dir2]
+                end
+            end
             pos = npos
         end
     end
     println("Part 1: ", length(seen))
-
-    p2 = 0
-    seen = delete!(seen, start)
-    for item ∈ seen
-        dir = 1
-        pos = start
-        seen2 = Set{Tuple{Tuple{Int,Int},Int}}()
-        while all(pos .∈ (rows, cols))
-            (pos, dir) ∈ seen2 && (p2+=1; break)
-            push!(seen2, (pos, dir))
-            npos = pos.+dirs[dir]
-            if npos ∈ O || npos == item
-                dir = mod1(dir+1, 4)
-            else
-                pos = pos .+ dirs[dir]
-            end
-        end
-    end
     println("Part 2: ", p2)
 end
