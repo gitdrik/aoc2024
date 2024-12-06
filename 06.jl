@@ -27,7 +27,6 @@ open("06.txt") do f
     p2 = 0
     seen = delete!(seen, start)
     for item ∈ seen
-        push!(O, item)
         dir = 1
         pos = start
         seen2 = Set{Tuple{Tuple{Int,Int},Int}}()
@@ -35,13 +34,12 @@ open("06.txt") do f
             (pos, dir) ∈ seen2 && (p2+=1; break)
             push!(seen2, (pos, dir))
             npos = pos.+dirs[dir]
-            if npos ∈ O
+            if npos ∈ O || npos == item
                 dir = mod1(dir+1, 4)
             else
                 pos = pos .+ dirs[dir]
             end
         end
-        delete!(O, item)
     end
     println("Part 2: ", p2)
 end
