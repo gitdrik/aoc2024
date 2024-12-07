@@ -5,7 +5,6 @@ open("07.txt") do f
         return verify(ans, n+ns[i], ns, i+1, p2) ||
                verify(ans, n*ns[i], ns, i+1, p2) ||
                p2 && verify(ans, n * 10^ndigits(ns[i]) + ns[i], ns, i+1, p2)
-
     end
 
     p1, p2 = 0, 0
