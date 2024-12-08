@@ -6,3 +6,4 @@ using BenchmarkTools; @btime
 05: 0.89 ms
 06: 0.28 s
 07: 0.20 s
+08: 0.27 ms
