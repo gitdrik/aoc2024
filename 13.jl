@@ -4,10 +4,13 @@ open("13.txt") do f
     for m ∈ machines
         ss = split(m, r"\+|,|=|\n")
         x1, y1, x2, y2, x, y = parse.(Int, ss[2:2:end])
-        ab1, ab2 = [x1 x2; y1 y2] \ [x, y], [x1 x2; y1 y2] \ [x+n, y+n]
-        abr1, abr2 = round.(Int, ab1), round.(Int, ab2)
-        sum(abs.(ab1 .- abr1)) < 0.01 && (p1 += 3*abr1[1] + abr1[2])
-        sum(abs.(ab2 .- abr2)) < 0.01 && (p2 += 3*abr2[1] + abr2[2])        
+        A = (y*x2 - y2*x) // (y1*x2 - y2*x1)
+        B = (x - x1*A) // x2
+        1==denominator(A)==denominator(B) && (p1 += Int(3*A+B))
+        x, y = x+n, y+n
+        A = (y*x2 - y2*x) // (y1*x2 - y2*x1)
+        B = (x - x1*A) // x2
+        1==denominator(A)==denominator(B) && (p2 += Int(3*A+B))
     end
     println("Part 1: ", p1)
     println("Part 2: ", p2)
