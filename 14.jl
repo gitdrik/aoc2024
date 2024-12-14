@@ -1,6 +1,5 @@
 open("14.txt") do f
     X, Y = 101, 103
-    steps = 100
     R::Array{NTuple{4,Int}} = []
     Q = [0, 0, 0, 0]
     for l ∈ eachline(f)
@@ -15,9 +14,6 @@ open("14.txt") do f
         push!(R, (x, y, dx, dy))
     end
     println("Part 1: ", prod(Q))
-    DY = sort([dy for (_,_,_,dy)∈R])
-    println.(DY)
-    exit()
 
     # 33 87 134 190 235  33:101:10000 87:103:10000
     # mod(t-33, 101)==0 && mod(t-87, 103)==0
