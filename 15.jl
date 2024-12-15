@@ -1,20 +1,16 @@
 open("15.txt") do f
-    p = (0, 0)
-    M::Array{Array{Char}} = []
-    for (r, l) ∈ enumerate(eachline(f))
-        isempty(l) && break
-        c = findfirst('@', l)
-        l = collect(l)
-        if c ≠ nothing
-            p = (r, c)
-            l[c] = '.'
+    map, inst = split(read(f, String), "\n\n")
+    M = collect.(split(map, "\n"))
+    sr, sc = 0, 0
+    for r ∈ eachindex(M), c ∈ eachindex(M[r])
+        if M[r][c]=='@'
+            sr, sc = r, c
+            M[r][c] = '.'
         end
-        push!(M, l)
     end
     m = Dict('^'=>(-1,0), '>'=>(0,1), 'v'=>(1,0), '<'=>(0,-1))
-    I = [m[c] for c ∈ join(readlines(f))]
+    I = [m[c] for c ∈ replace(inst, "\n"=>"")]
 
-    p2 = (p[1], 2*(p[2]-1) + 1)
     M2::Array{Array{Char}} = []
     for r ∈ eachindex(M)
         push!(M2, [])
@@ -29,54 +25,54 @@ open("15.txt") do f
         end
     end
 
-    function isstuck(M, p, dp)
-        r, c = p
+    function isstuck(M, r, c, dr, dc)
         M[r][c] == '.' && return false
         M[r][c] == '#' && return true
-        nr, nc = p .+ dp
-        if dp[1]==0 || M[r][c]=='O'
-            return isstuck(M, (nr, nc), dp)
+        nr, nc = r+dr, c+dc
+        if dr==0 || M[r][c]=='O'
+            return isstuck(M, nr, nc, dr, dc)
         end
         if M[r][c] == '['
-            nr2, nc2 = (nr, nc+1)
+            nr2, nc2 = nr, nc+1
         else
             @assert M[r][c] == ']'
-            nr2, nc2 = (nr, nc-1)
+            nr2, nc2 = nr, nc-1
         end
-        return isstuck(M, (nr, nc), dp) || isstuck(M, (nr2, nc2), dp)
+        return isstuck(M, nr, nc, dr, dc) || isstuck(M, nr2, nc2, dr, dc)
     end
 
-    function move!(M, p, dp)
-        r, c = p
+    function move!(M, r, c, dr, dc)
         if M[r][c] ≠ '.'
-            nr, nc = p .+ dp
-            if dp[1] == 0 || M[r][c] == 'O'
-                move!(M, (nr, nc), dp)
+            nr, nc = r+dr, c+dc
+            if dr == 0 || M[r][c] == 'O'
+                move!(M, nr, nc, dr, dc)
                 M[nr][nc], M[r][c] = M[r][c], M[nr][nc]
             elseif M[r][c]=='['
-                move!(M, (nr, nc), dp)
-                move!(M, (nr, nc+1), dp)
+                move!(M, nr, nc, dr, dc)
+                move!(M, nr, nc+1, dr, dc)
                 M[nr][nc], M[r][c] = M[r][c], M[nr][nc]
                 M[nr][nc+1], M[r][c+1] = M[r][c+1], M[nr][nc+1]
             elseif M[r][c]==']'
-                move!(M, (nr, nc), dp)
-                move!(M, (nr, nc-1), dp)
+                move!(M, nr, nc, dr, dc)
+                move!(M, nr, nc-1, dr, dc)
                 M[nr][nc], M[r][c] = M[r][c], M[nr][nc]
                 M[nr][nc-1], M[r][c-1] = M[r][c-1], M[nr][nc-1]
             end
         end
     end
 
-    for dp ∈ I
-        np = p .+ dp
-        if !isstuck(M, np, dp)
-            move!(M, np, dp)
-            p = np
+    r, c = sr, sc
+    r2, c2 = sr, 2*(sc-1)+1
+    for (dr, dc) ∈ I
+        nr, nc = r+dr, c+dc
+        if !isstuck(M, nr, nc, dr, dc)
+            move!(M, nr, nc, dr, dc)
+            r, c = nr, nc
         end
-        np = p2 .+ dp
-        if !isstuck(M2, np, dp)
-            move!(M2, np, dp)
-            p2 = np
+        nr, nc = r2+dr, c2+dc
+        if !isstuck(M2, nr, nc, dr, dc)
+            move!(M2, nr, nc, dr, dc)
+            r2, c2 = nr, nc
         end
     end
 
@@ -87,7 +83,7 @@ open("15.txt") do f
         end
         return ans
     end
-    
+
     println("Part 1: ", score(M))
     println("Part 2: ", score(M2))
 end
