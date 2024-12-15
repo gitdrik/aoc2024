@@ -40,6 +40,7 @@ open("15.txt") do f
         if M[r][c] == '['
             nr2, nc2 = (nr, nc+1)
         else
+            @assert M[r][c] == ']'
             nr2, nc2 = (nr, nc-1)
         end
         return isstuck(M, (nr, nc), dp) || isstuck(M, (nr2, nc2), dp)
@@ -49,19 +50,19 @@ open("15.txt") do f
         r, c = p
         if M[r][c] ≠ '.'
             nr, nc = p .+ dp
-            if M[r][c]=='[' && dp[1] ≠ 0
+            if dp[1] == 0 || M[r][c] == 'O'
+                move!(M, (nr, nc), dp)
+                M[nr][nc], M[r][c] = M[r][c], M[nr][nc]
+            elseif M[r][c]=='['
                 move!(M, (nr, nc), dp)
                 move!(M, (nr, nc+1), dp)
                 M[nr][nc], M[r][c] = M[r][c], M[nr][nc]
                 M[nr][nc+1], M[r][c+1] = M[r][c+1], M[nr][nc+1]
-            elseif M[r][c]==']' && dp[1] ≠ 0
+            elseif M[r][c]==']'
                 move!(M, (nr, nc), dp)
                 move!(M, (nr, nc-1), dp)
                 M[nr][nc], M[r][c] = M[r][c], M[nr][nc]
                 M[nr][nc-1], M[r][c-1] = M[r][c-1], M[nr][nc-1]
-            else
-                move!(M, (nr, nc), dp)
-                M[nr][nc], M[r][c] = M[r][c], M[nr][nc]
             end
         end
     end
@@ -86,7 +87,7 @@ open("15.txt") do f
         end
         return ans
     end
-
+    
     println("Part 1: ", score(M))
     println("Part 2: ", score(M2))
 end
