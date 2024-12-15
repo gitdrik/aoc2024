@@ -61,21 +61,6 @@ open("15.txt") do f
         end
     end
 
-    r, c = sr, sc
-    r2, c2 = sr, 2*(sc-1)+1
-    for (dr, dc) ∈ I
-        nr, nc = r+dr, c+dc
-        if !isstuck(M, nr, nc, dr, dc)
-            move!(M, nr, nc, dr, dc)
-            r, c = nr, nc
-        end
-        nr, nc = r2+dr, c2+dc
-        if !isstuck(M2, nr, nc, dr, dc)
-            move!(M2, nr, nc, dr, dc)
-            r2, c2 = nr, nc
-        end
-    end
-
     function score(M)
         ans = 0
         for (r, row)∈enumerate(M), (c, ch)∈enumerate(row)
@@ -84,6 +69,17 @@ open("15.txt") do f
         return ans
     end
 
-    println("Part 1: ", score(M))
-    println("Part 2: ", score(M2))
+    function gorobot!(M, I, r, c)
+        for (dr, dc) ∈ I
+            nr, nc = r+dr, c+dc
+            if !isstuck(M, nr, nc, dr, dc)
+                move!(M, nr, nc, dr, dc)
+                r, c = nr, nc
+            end
+        end
+        return score(M)
+    end
+    
+    println("Part 1: ", gorobot!(M, I, sr, sc))
+    println("Part 2: ", gorobot!(M2, I, sr, 2*(sc-1)+1))
 end
