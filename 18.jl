@@ -1,7 +1,5 @@
 open("18.txt") do f
     xr, yr = 1:71, 1:71
-    sx, sy = 1, 1
-    ex, ey = 71, 71
     M = falses(xr.stop, yr.stop)
     dp =[(-1, 0), (0, 1), (1, 0), (0, -1)]    
     for (i, byte) ∈ enumerate(eachline(f))
@@ -9,11 +7,11 @@ open("18.txt") do f
         M[x+1, y+1] = true
         i < 1024 && continue
         steps = 0
-        Q = [(steps, sx, sy)]
+        Q = [(steps, xr.start, yr.start)]
         seen = Set{Tuple{Int, Int}}()
         while !isempty(Q)
             steps, x, y = popfirst!(Q)
-            (x, y)==(ex, ey) && break 
+            (x, y)==(xr.stop, yr.stop) && break 
             (x, y) ∈ seen && continue
             push!(seen, (x, y))
             for (dx, dy) ∈ dp
@@ -22,7 +20,7 @@ open("18.txt") do f
             end
         end
         i==1024 && println("Part 1: ", steps)
-        if (x, y) ≠ (ex, ey)
+        if (x, y) ≠ (xr.stop, yr.stop)
             println("Part 2: ", byte)
             break
         end
