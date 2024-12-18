@@ -10,7 +10,7 @@ open("18.txt") do f
         Q = [(steps, xr.start, yr.start)]
         seen = Set{Tuple{Int, Int}}()
         while !isempty(Q)
-            steps, x, y = popfirst!(Q)
+            steps, x, y = i > 1024 ? pop!(Q) : popfirst!(Q)
             (x, y)==(xr.stop, yr.stop) && break 
             (x, y) ∈ seen && continue
             push!(seen, (x, y))
