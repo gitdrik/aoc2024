@@ -17,3 +17,4 @@ using BenchmarkTools; @btime
 16: 5.0. ms
 17: (26 µs)
 18: 0.12 s
+19: 0.15 s
