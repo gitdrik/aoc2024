@@ -2,13 +2,9 @@ open("20.txt") do f
     M = readlines(f)
     rows, cols = eachindex(M), eachindex(M[1])
     sr, sc, er, ec, = 0, 0, 0, 0
-    dp = [(-1, 0), (0, 1), (1, 0), (0, -1)]
-    for r∈rows, c∈cols
-        if M[r][c]=='S'
-            sr, sc = r, c
-        elseif M[r][c]=='E'
-            er, ec = r, c
-        end
+    for r ∈ rows, c ∈ cols
+        M[r][c]=='S' && ((sr, sc) = (r, c))
+        M[r][c]=='E' && ((er, ec) = (r, c))
     end
 
     Q = [(0, er, ec)]
@@ -17,8 +13,8 @@ open("20.txt") do f
         steps, r, c = popfirst!(Q)
         (r, c) ∈ keys(trac) && continue
         trac[(r,c)] = steps
-        for (dr, dc) ∈ dp
-            nr, nc = r+dr, c+dc
+        for dp ∈ [(-1, 0), (0, 1), (1, 0), (0, -1)]
+            nr, nc = (r, c) .+ dp
             M[nr][nc] ≠ '#' && push!(Q, (steps+1, nr, nc))
         end
     end
