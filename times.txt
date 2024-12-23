@@ -21,3 +21,4 @@ using BenchmarkTools; @btime
 20: 0.21 s
 21: 0.36 ms
 22: 8.6 s
+23: 3.3 ms
