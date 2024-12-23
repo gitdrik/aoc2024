@@ -19,8 +19,8 @@ open("23.txt") do f
     end
     println(length(p1))
 
-    # Works if at least one computer in the largest
-    # LAN has no connection outside of the LAN.
+    # Works if at least one computer in the largest LAN has no connection
+    # outside of the LAN, which is not the case. Can also work if lucky.
     p2 = Array{String}([])
     for c ∈ keys(D)
         connected = Array{String}([])
