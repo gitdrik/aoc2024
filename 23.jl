@@ -7,7 +7,7 @@ open("23.txt") do f
         push!(D[b], a)
     end
 
-    p1 = Set{Set{String}}(Set())
+    p1 = Set{Set{String}}()
     for c ∈ keys(D)
         !startswith(c, 't') && continue
         cc = collect(D[c])
@@ -19,6 +19,8 @@ open("23.txt") do f
     end
     println(length(p1))
 
+    # Works if at least one computer in the largest
+    # LAN has no connection outside of the LAN.
     p2 = Array{String}([])
     for c ∈ keys(D)
         connected = Array{String}([])
