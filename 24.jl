@@ -6,7 +6,7 @@ open("24.txt") do f
             lbl, value = split(l, ": ")
             G[lbl] = [value]
         else
-            a, op, b,_ ,lbl = split(l)
+            a, op, b, _, lbl = split(l)
             G[lbl] = [a, b, op]
         end
     end
