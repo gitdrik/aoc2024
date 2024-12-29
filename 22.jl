@@ -14,17 +14,16 @@ open("22.txt") do f
     end
     println("Part 1: ", p1)
 
-    bananadict = Dict{NTuple{4, Int}, Int}()
+    bananas = zeros(Int, 80000)
     for seq ∈ seqs
-        seen = Set{NTuple{4, Int}}()
+        seen = falses(80000)
         for i ∈ 1:length(seq)-4
-            delta = Tuple(b-a for (a,b) ∈ zip(seq[i:i+3], seq[i+1:i+4]))
-            if delta ∉ seen
-                push!(seen, delta)
-                delta ∉ keys(bananadict) && (bananadict[delta] = 0)
-                bananadict[delta] += seq[i+4]
+            delta = 40000 + sum((seq[i+1:i+4]-seq[i:i+3]) .* [4096, 256, 16, 1])
+            if !seen[delta]
+                seen[delta] = true
+                bananas[delta] += seq[i+4]
             end
         end
     end
-    println("Part 2: ", maximum(values(bananadict)))
+    println("Part 2: ", maximum(bananas))
 end
