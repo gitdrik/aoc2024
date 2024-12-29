@@ -14,28 +14,17 @@ open("22.txt") do f
     end
     println("Part 1: ", p1)
 
-    combos = Set{NTuple{4, Int}}()
-    bananadicts = Array{Dict{NTuple{4, Int}, Int}}([])
+    bananadict = Dict{NTuple{4, Int}, Int}()
     for seq ∈ seqs
-        push!(bananadicts, Dict())
+        seen = Set{NTuple{4, Int}}()
         for i ∈ 1:length(seq)-4
             delta = Tuple(b-a for (a,b) ∈ zip(seq[i:i+3], seq[i+1:i+4]))
-            if delta ∉ keys(bananadicts[end])
-                push!(combos, delta)
-                bananadicts[end][delta] = seq[i+4]
+            if delta ∉ seen
+                push!(seen, delta)
+                delta ∉ keys(bananadict) && (bananadict[delta] = 0)
+                bananadict[delta] += seq[i+4]
             end
         end
     end
-
-    p2 = 0
-    for c ∈ combos
-        bananas = 0
-        for (i, bananadict) ∈ enumerate(bananadicts)
-            if c ∈ keys(bananadict)
-                bananas += bananadict[c]
-            end
-        end
-        p2 = max(p2, bananas)
-    end
-    println("Part 2: ", p2)
+    println("Part 2: ", maximum(values(bananadict)))
 end
