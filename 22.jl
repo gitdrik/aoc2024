@@ -1,24 +1,27 @@
 open("22.txt") do f
-    p1 = 0
+    ls = readlines(f)
+    nums = length(ls)
     prune = 16777215
-    seqs = Array{Array{Int}}([])
-    deltas = Array{Array{Int}}([])
-    for n ∈ parse.(Int, eachline(f))
-        push!(seqs, [mod(n, 10)])
-        push!(deltas, [0])
-        old = mod(n, 10)
-        for i ∈ 1:2000
-            n = (n ⊻ n<<6) & prune
-            n = (n ⊻ n>>5) & prune
-            n = (n ⊻ n<<11) & prune
-            new = mod(n, 10)
-            push!(seqs[end], new)
-            push!(deltas[end], new-old)
-            old = new
+    seqs = [Array{Int}(undef, 2001) for _ ∈ 1:nums]
+    deltas = [Array{Int}(undef, 2001) for _ ∈ 1:nums]
+    n = parse.(Int, ls)
+    new, old = zeros(Int, nums), zeros(Int, nums)
+    Threads.@threads for i ∈ eachindex(ls)
+        old[i] = mod(n[i], 10)
+        seqs[i][1] = old[i]
+        deltas[i][1] = 0
+        for j ∈ 1:2000
+            n[i] = (n[i] ⊻ n[i]<<6) & prune
+            n[i] = (n[i] ⊻ n[i]>>5)
+            n[i] = (n[i] ⊻ n[i]<<11) & prune
+            new[i] = mod(n[i], 10)
+            seqs[i][j+1] = new[i]
+            deltas[i][j+1] = new[i] - old[i]
+            old[i] = new[i]
         end
-        p1 += n
     end
-    println("Part 1: ", p1)
+    println("Part 1: ", sum(n))
+
     bananas = zeros(Int, 80000)
     for (j, delta) ∈ enumerate(deltas)
         seen = falses(80000)
